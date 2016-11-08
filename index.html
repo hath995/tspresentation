@@ -24,45 +24,59 @@
     <body>
         <div class="reveal">
             <div class="slides">
-                <section>TypeScript</section>
+                <section><h1>TypeScript</h1></section>
+                <section>
+                    <h2>What is it?</h2>
+                    <p>
+                    TypeScript is a strict superset of JavaScript. It keeps all of the JavaScript synatx and features.
+                    What it adds is syntax for description types of data and functions within JavaScript. 
+                    </p>
+                </section>
+                <section>
+                    <h2>How do you use it?</h2>
+                    <pre><code class="bash">
+tsc tilename.ts
+                    </pre></code>
+                    <p>Upon running tsc on a ts file it will generate a .js file of the same name, which is the translation of the typescript code</p>
+                </section>
                 <section>
                     <h2>Setup</h2>
                     <pre><code class="bash">
-                        sudo npm install -g typescript
+sudo npm install -g typescript
                     </pre></code>
                     <p>installs the command tsc</p>
                 </section>
                 <section>
                     <h2>JavaScript</h2>
                     <pre><code class="javascript">
-                        var a = 1;
-                        var b = true;
-                        var c = "test";
-                        var d = null;
-                        var e = undefined;
-                        var f = [1,2,3]
-                        var g = ["one","two"]
+var a = 1;
+var b = true;
+var c = "test";
+var d = null;
+var e = undefined;
+var f = [1,2,3]
+var g = ["one","two"]
                     </code></pre>
                 </section>
                 <section>
                     <h2>Now with Types</h2>
                     <pre><code class="typescript">
-                        var a: number = 1;
-                        var b: boolean = true;
-                        var c: string = "test";
-                        var d: null = null;
-                        var e: undefined = undefined;
-                        var f: number[] = [1,2,3]
-                        var g: string[] = ["one","two"]
+var a: number = 1;
+var b: boolean = true;
+var c: string = "test";
+var d: null = null;
+var e: undefined = undefined;
+var f: number[] = [1,2,3]
+var g: string[] = ["one","two"]
                     </code></pre>
                 </section>
                 <section>
                     <h2>What happens when we get things wrong</h2>
 
                     <pre><code class="typescript">
-                        var a: number = "test";
-                        var b: boolean = 3;
-                        var c: string = false;
+var a: number = "test";
+var b: boolean = 3;
+var c: string = false;
                     </code></pre>
                     <pre>
 example.ts|1 col 5 error| Type 'string' is not assignable to type 'number'.
@@ -73,33 +87,33 @@ example.ts|3 col 5 error| Type 'boolean' is not assignable to type 'string'.
                 <section>
                     <h2>functions</h2>
                     <pre><code class="javascript">
-                        function sum(x, y) {
-                            return x + y;
-                        }
+function sum(x, y) {
+    return x + y;
+}
                     </code></pre>
                 </section>
                 <section>
                     <h2>function types</h2>
                     <pre><code class="typescript">
-                        function sum(x: number, y: number): number {
-                            return x + y;
-                        }
+function sum(x: number, y: number): number {
+    return x + y;
+}
                     </code></pre>
                 </section>
                 <section>
                     <h2>objects</h2>
                     <pre><code class="javascript">
-                        var point1 = {
-                            x: 1,
-                            y: 4,
-                            name: "start"
-                        };
-                        var point2 = {
-                            x: 4,
-                            y: 10,
-                            z: -1,
-                            name: "end"
-                        };
+var point1 = {
+    x: 1,
+    y: 4,
+    name: "start"
+};
+var point2 = {
+    x: 4,
+    y: 10,
+    z: -1,
+    name: "end"
+};
                     </code></pre>
                 </section>
                 <section>
@@ -117,6 +131,7 @@ var point2: {x: number, y: number, z?: number, name: string} = {
     name: "end"
 };
                     </code></pre>
+                    <p> The ? after property names indicates the property is optional </p>
                 </section>
                 <section>
                     <h2>Type Aliases</h2>
@@ -147,24 +162,24 @@ var sum3: binary_op = sum;
                     <h2>Any Type</h2>
                     <p>The any type allows you to put anything inside.</p>
                     <pre><code class="typescript">
-                        var a: any = 1;
-                        var b: any = true;
-                        var c: any = "test";
-                        var d: any = null;
-                        var e: any = undefined;
-                        var f: any[] = [1,2,3]
-                        var g: any = ["one","two"]
+var a: any = 1;
+var b: any = true;
+var c: any = "test";
+var d: any = null;
+var e: any = undefined;
+var f: any[] = [1,2,3]
+var g: any = ["one","two"]
                     </code></pre>
                 </section>
                 <section>
                     <pre><code class="typescript">
-                        function head(xs: number[]): number {
-                            return xs[0];
-                        }
+function head(xs: number[]): number {
+    return xs[0];
+}
 
-                        function tail(xs: number[]): number[] {
-                            return xs.slice(1);
-                        }
+function tail(xs: number[]): number[] {
+    return xs.slice(1);
+}
                     </code></pre>
                     <p>This code works well with number arrays like head([1,2,3]) but is there any reason it wouldn't work on
                         an array of strings?. head(["a","b"])
@@ -183,6 +198,46 @@ function tail< A >(xs: A[]): A[] {
 }
 let one = head< number >([1,2,3]);
 let letter = head< string >(["a","b"]);
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>Interfaces</h2>
+                    <p>Interfaces can be used to describe objects, classes, and functions</p>
+                    <pre><code class="typescript">
+//object type
+interface Point {
+    x: number;
+    y: number;
+    z?: number;
+    label: string;
+}
+//function type
+interface binary_op {
+    (x: number, y: number): number
+}
+                    </code></pre>
+                </section>
+                </section>
+                    <h2>Indexable types</h2>
+                    <p>Interfaces can also be used to describe container objects like arrays and objects</p>
+                    <pre><code>
+interface PhoneBook {
+    [phoneNumber: string]: Person
+}
+
+class Person {
+    constructor(public name: string) {}
+}
+
+var yellowpages: PhoneBook = {
+    "1112223333": new Person("John"),
+    "3334445555": new Person("Jane")
+}
+
+interface GuestList {
+    [index: number]: Person
+}
+var partylist: GuestList = [new Person("John"), new Person("Jane")]
                     </code></pre>
                 </section>
             </div>
