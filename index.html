@@ -54,8 +54,9 @@ var b = true;
 var c = "test";
 var d = null;
 var e = undefined;
-var f = [1,2,3]
-var g = ["one","two"]
+var f = [1,2,3];
+var g = ["one","two"];
+var h = new Date();
                     </code></pre>
                 </section>
                 <section>
@@ -68,6 +69,7 @@ var d: null = null;
 var e: undefined = undefined;
 var f: number[] = [1,2,3]
 var g: string[] = ["one","two"]
+var h: Date = new Date();
                     </code></pre>
                 </section>
                 <section>
@@ -201,8 +203,64 @@ let letter = head< string >(["a","b"]);
                     </code></pre>
                 </section>
                 <section>
+                    <h2>Classes</h2>
+                    <p>Typescript supports the es6 syntax for classes</p>
+                    <pre><code class="typescript">
+class Person {
+    name: string;
+    constructor(name: string) {
+        this.name = name;
+    }
+}
+class SoftwareEngineer extends Person {
+    prog_language: string;
+    constructor(name: string, prog_language: string) {
+        super(name)
+    }
+}
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>Class syntax</h2>
+                    <p>Typescript simplifies the "this.property = property" pattern with the public keyword. It also supports private and protected attributes on classes,
+                    but these are compiler enforced only.
+                    </p>
+                    <pre><code class="typescript">
+class Person {
+    name: string;
+    constructor(public name: string) {}
+}
+class SoftwareEngineer extends Person {
+    prog_language: string;
+    constructor(public name: string, private prog_language: string) {
+        super(name)
+        this.prog_language = prog_language;
+    }
+}
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>Abstract Classes</h2>
+                    <p>Abstract classes are base classed which are meant to be inheritted from. They cannot be instantiated directly. They specify methods which must
+                    be implemented in the subclasses. They are allowed to included implementations of methods to share as well. </p>
+                    <pre><code class="typescript">
+abstract class Animal {
+    abstract makeSound(): void;
+    move(): void {
+        console.log("roaming the earth...");
+    }
+}
+class Mammal extends Animal {
+    makeSound(): void {
+        console.log("A noise!");
+    }
+}
+                    </code></pre>
+                    
+                </section>
+                <section>
                     <h2>Interfaces</h2>
-                    <p>Interfaces can be used to describe objects, classes, and functions</p>
+                    <p>Interfaces can be used to describe objects, classes, and functions. They are similar to abstract classes however, they cannot contain an implementation of a function.</p>
                     <pre><code class="typescript">
 //object type
 interface Point {
@@ -211,33 +269,51 @@ interface Point {
     z?: number;
     label: string;
 }
+var origin: Point = {x: 0, y: 0, z:0, label: "origin"};
 //function type
 interface binary_op {
     (x: number, y: number): number
 }
+var add_one: binary_op = function(x: number, y: number): number {
+    return x + y + 1
+};
                     </code></pre>
                 </section>
-                </section>
+                <section>
                     <h2>Indexable types</h2>
                     <p>Interfaces can also be used to describe container objects like arrays and objects</p>
                     <pre><code>
 interface PhoneBook {
     [phoneNumber: string]: Person
 }
-
 class Person {
     constructor(public name: string) {}
 }
-
 var yellowpages: PhoneBook = {
     "1112223333": new Person("John"),
     "3334445555": new Person("Jane")
 }
-
 interface GuestList {
     [index: number]: Person
 }
 var partylist: GuestList = [new Person("John"), new Person("Jane")]
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>Classes implementing interfaces</h2>
+                    <p>Interfaces can ensure that a class must implement specific methods and attributes</p>
+                    <pre><code>
+interface ClockInterface {
+    currentTime: Date;
+    setTime(d: Date);
+}
+class Clock implements ClockInterface {
+    currentTime: Date;
+    setTime(d: Date) {
+        this.currentTime = d;
+    }
+    constructor(hour: number, minute: number) {}
+}
                     </code></pre>
                 </section>
             </div>
