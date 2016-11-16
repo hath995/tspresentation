@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-        <title>reveal.js</title>
+        <title>TypeScript Talk</title>
 
         <link rel="stylesheet" href="css/reveal.css">
         <link rel="stylesheet" href="css/theme/black.css">
@@ -28,8 +28,8 @@
                 <section>
                     <h2>What is it?</h2>
                     <p>
-                    TypeScript is a strict superset of JavaScript. It keeps all of the JavaScript synatx and features.
-                    What it adds is syntax for description types of data and functions within JavaScript. 
+                    TypeScript is a strict superset of JavaScript ES6+. It keeps all of the JavaScript syntax and features.
+                    What TypeScript adds is syntax for types of data and functions within JavaScript. 
                     </p>
                 </section>
                 <section>
@@ -161,6 +161,15 @@ var sum3: binary_op = sum;
                     </code></pre>
                 </section>
                 <section>
+                    <h2>Type Aliases</h2>
+                    <p>Type aliases can be used to alias primitives, which can be useful for documentation</p>
+                    <pre><code class="typescript">
+type Dollars = number;
+type Name = string;
+function BankBalance(person: Name): Dollars { return 3.50 }
+                    </code></pre>
+                </section>
+                <section>
                     <h2>Any Type</h2>
                     <p>The any type allows you to put anything inside.</p>
                     <pre><code class="typescript">
@@ -189,7 +198,7 @@ function tail(xs: number[]): number[] {
                 </section>
                 <section>
                     <h2>Generic (aka Parametric) Types</h2>
-                    <p>These functions take a type as a parameter. A is a variable. </p>
+                    <p>These functions take a type as a parameter. A is a variable. Interfaces, classes, and type aliases all support generics</p>
                     <pre><code class="typescript">
 function head< A >(xs: A[]): A {
     return xs[0];
@@ -200,6 +209,7 @@ function tail< A >(xs: A[]): A[] {
 }
 let one = head< number >([1,2,3]);
 let letter = head< string >(["a","b"]);
+type Container< A > = { value: A };
                     </code></pre>
                 </section>
                 <section>
@@ -282,7 +292,7 @@ var add_one: binary_op = function(x: number, y: number): number {
                 <section>
                     <h2>Indexable types</h2>
                     <p>Interfaces can also be used to describe container objects like arrays and objects</p>
-                    <pre><code>
+                    <pre><code class="typescript">
 interface PhoneBook {
     [phoneNumber: string]: Person
 }
@@ -302,7 +312,7 @@ var partylist: GuestList = [new Person("John"), new Person("Jane")]
                 <section>
                     <h2>Classes implementing interfaces</h2>
                     <p>Interfaces can ensure that a class must implement specific methods and attributes</p>
-                    <pre><code>
+                    <pre><code class="typescript">
 interface ClockInterface {
     currentTime: Date;
     setTime(d: Date);
@@ -314,6 +324,21 @@ class Clock implements ClockInterface {
     }
     constructor(hour: number, minute: number) {}
 }
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>Immutable data</h2>
+                    <p>Variables, classes, and interfaces can enforce immutability on variables and properties. TypeScript also comes with a ReadonlyArray<T> type. Only the compiler forbids reassignment. </p>
+                    <pre><code class="typescript">
+const example = true;
+interface ImmutablePoint {
+    readonly x: number;
+    readonly y: number;
+}
+class Pet {
+    constructor(readonly public name: string) {};
+}
+let hex_letters: ReadonlyArray< string > = ['A','B','C','D','E','F'];
                     </code></pre>
                 </section>
             </div>
