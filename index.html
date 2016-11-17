@@ -22,6 +22,21 @@
         </script>
     </head>
     <body>
+        <!--
+            To Cover:
+            Tuple Types
+            Union Types
+            Intersection Types
+            Discriminated Unions
+            Enums
+            string literal types
+            variance
+            class static methods
+            structural type system
+            tsconfig
+            typecast
+            generics constraints
+        -->
         <div class="reveal">
             <div class="slides">
                 <section><h1>TypeScript</h1></section>
@@ -228,6 +243,7 @@ class SoftwareEngineer extends Person {
         super(name)
     }
 }
+var joeTester: Person = new SoftwareEngineer("Joe Tester", "TypeScript");
                     </code></pre>
                 </section>
                 <section>
@@ -336,9 +352,94 @@ interface ImmutablePoint {
     readonly y: number;
 }
 class Pet {
-    constructor(readonly public name: string) {};
+    constructor(public readonly name: string) {};
 }
 let hex_letters: ReadonlyArray< string > = ['A','B','C','D','E','F'];
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>Tuple Types</h2>
+                    <p>Tuples are a way to describe  fixed length arrays with types for each index.</p>
+                    <pre><code class="typescript">
+let person: [string, number] = ["John Smith", 30];
+person = ["Jane Doe", 30]; //ok
+person = [20, "Joe Tester"] // Error
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>Union Types</h2>
+                    <p>Union types are essentially a type which can be either an A or B, where A and B are distinct separate types. </p>
+                    <pre><code class="typescript">
+var password: string | number = "test"
+password = 1234 //also ok!
+function validateArray(
+    values: boolean[] | string[],
+    f: (x: string) => boolean | null | undefined
+): boolean {
+    if(f) {
+        return values.every(x => f(x));
+    }else{
+        values.every(x => x);
+    }
+}
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>Intersection Types</h2>
+                    <p>Intersection types allow you reprensent an object which has properties from both type A and B, where are A and B are distinct types. The mixin pattern can be described with intersection types.</p>
+                    <pre><code class="typescript">
+type Fahrenheit = {fahrenheit: number};
+type Celcius = {celcius: number};
+function convertToCelcius(temp: Fahrenheit): Fahrenheit & Celcius {
+    let c_temp = (temp.fahrenheit-32)*(5/9);
+    temp.celcius = c_temp;
+    return temp;
+}
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>String Literal Types</h2>
+                    <p>You can treat string constants as types.</p>
+                    <pre><code class="typescript">
+type PrimaryColor = "red" | "blue" | "green";
+function adjustColor(color: PrimaryColor, value: number) { /* */ }
+adjustColor("red", 123) //ok
+adjustColor("purple", 255) //Error
+                    </pre></code>
+                    
+                </section>
+                <section>
+                    <h2>Discriminated Unions</h2>
+                    <p></p>
+                    <pre><code>
+interface Square {
+    kind: "square";
+    size: number;
+}
+interface Rectangle {
+    kind: "rectangle";
+    width: number;
+    height: number;
+}
+interface Circle {
+    kind: "circle";
+    radius: number;
+}
+type Shape = Square | Rectangle | Circle;
+function area(s: Shape) {
+    switch (s.kind) {
+        case "square": return s.size * s.size;
+        case "rectangle": return s.height * s.width;
+        case "circle": return Math.PI * s.radius ** 2;
+    }
+}
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>Structural Typing</h2>
+                    <p>Most languages use what is called a nominal typesystem, which means that the only values which can be used in a variable of a type are the type or subtypes of that type. In a structural type system any type which matches the type structure can accepted instead of that type. </p>
+                    <pre><code class="typescript">
+
                     </code></pre>
                 </section>
             </div>
