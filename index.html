@@ -11,7 +11,15 @@
 
         <!-- Theme used for syntax highlighting of code -->
         <link rel="stylesheet" href="lib/css/zenburn.css">
+        <style>
+            .reveal h2,
+            .reveal h3,
+            .reveal h4 {
+                font-family: Verdana;
+                color: #43ABC9;
+            }
 
+        </style>
         <!-- Printing and PDF exports -->
         <script>
             var link = document.createElement( 'link' );
@@ -23,16 +31,54 @@
     </head>
     <body>
         <!--
+            For a newbie audience:
+                What is a type system?
+                What does it do for you?
+
+                What does TypeScript do for you?
+                Type Checking!
+
+                Type Inference!
+                control flow analysis
+                syntax checking
+
+
+                compiles es6 to es5 or es3
+                module system
+
+                gradual typing
+                tuneable strictness
+
+                refactor fearlessly
+                speed up development
+                types are documentation
+
+                finding bugs before they get into production costs less
+
+                dynamic type checking (runtime) vs static type checking (Compile time)
+
+            For a more experienced audience:
+              C & Java - Weak rigid inexpressive
+              JavaScript - highly dynamic and expressive we don't want to lose that
+              TypeScript - Has a powerful, expressive, and flexible type system to describe 
+
+
             To Cover:
-            Tuple Types
-            Union Types
-            Intersection Types
-            Discriminated Unions
-            Enums
-            string literal types
+            visual studio code
+            numeric literal types
+            true type
+            false type
+
+            *Tuple Types
+            *Union Types
+            *Intersection Types
+            *Discriminated Unions
+            *Enums
+            *string literal types
+            *structural type system vs Nominal Typing
+
             variance
             class static methods
-            structural type system
             tsconfig
             typecast
             generics constraints
@@ -43,26 +89,30 @@
                 <section>
                     <h2>What is it?</h2>
                     <p>
-                    TypeScript is a strict superset of JavaScript ES6+. It keeps all of the JavaScript syntax and features.
-                    What TypeScript adds is syntax for types of data and functions within JavaScript. 
+                    TypeScript, the language, is a strict superset of JavaScript ES6+ that adds a type system to JavaScript. It keeps all of the JavaScript syntax and features. </p>
+                    <p>What TypeScript adds is the syntax to describe types of data, objects, classes, and functions.
                     </p>
                 </section>
                 <section>
-                    <h2>How do you use it?</h2>
-                    <pre><code class="bash">
-tsc tilename.ts
-                    </pre></code>
-                    <p>Upon running tsc on a ts file it will generate a .js file of the same name, which is the translation of the typescript code</p>
+                    <h2>What is a type?</h2>
+                    <p>According to wikipedia</p>
+                    <p>
+                    <b>
+                        A data type is a classification of data which tells the compiler or interpreter how the programmer intends to use the data.
+                    </b>
+                    </p>
                 </section>
                 <section>
-                    <h2>Setup</h2>
-                    <pre><code class="bash">
-sudo npm install -g typescript
-                    </pre></code>
-                    <p>installs the command tsc</p>
+                    <h2>Why should you care about types?</h2>
+                    <p>
+Type checking, the process of validating matching types in your programs, removes an entire category of bugs from your program by not allowing you to make them. Essentially, a type system is there to help you ensure correct code without even running your program.
+                    </p>
                 </section>
                 <section>
-                    <h2>JavaScript</h2>
+                    <h2>JavaScript with Types</h2>
+                    <table style="width: 100%;">
+                        <tr><th style="text-align: center;">JavaScript</th><th style="text-align: center;">TypeScript</th></tr>
+                    <tr><td>
                     <pre><code class="javascript">
 var a = 1;
 var b = true;
@@ -74,9 +124,8 @@ var g = ["one","two"];
 var h = new Date();
 var i = Symbol("foo")
                     </code></pre>
-                </section>
-                <section>
-                    <h2>Now with Types</h2>
+                    </td>
+                    <td>
                     <pre><code class="typescript">
 var a: number = 1;
 var b: boolean = true;
@@ -88,6 +137,9 @@ var g: string[] = ["one","two"]
 var h: Date = new Date();
 var i: symbol = Symbol("foo")
                     </code></pre>
+                    </td>
+                    </tr>
+                    </table>
                 </section>
                 <section>
                     <h2>What happens when we get things wrong</h2>
@@ -110,9 +162,9 @@ function sum(x, y) {
     return x + y;
 }
                     </code></pre>
-                </section>
-                <section>
+
                     <h2>function types</h2>
+
                     <pre><code class="typescript">
 function sum(x: number, y: number): number {
     return x + y;
@@ -127,27 +179,13 @@ var point1 = {
     y: 4,
     name: "start"
 };
-var point2 = {
-    x: 4,
-    y: 10,
-    z: -1,
-    name: "end"
-};
                     </code></pre>
-                </section>
-                <section>
-                    <h2>object types</h2>
+                    <h4>object types</h4>
                     <pre><code class="typescript">
 var point1: {x: number, y: number, z?: number, name: string} = {
     x: 1,
     y: 4,
     name: "start"
-};
-var point2: {x: number, y: number, z?: number, name: string} = {
-    x: 4,
-    y: 10,
-    z: -1,
-    name: "end"
 };
                     </code></pre>
                     <p> The ? after property names indicates the property is optional </p>
@@ -170,12 +208,33 @@ var point2: Point = {
                     </code></pre>
                 </section>
                 <section>
-                    <h2>Function Type Alias</h2>
+                    <h2>String Literal Types</h2>
+                    <p>You can treat string constants as types.</p>
                     <pre><code class="typescript">
-type binary_op = (x: number, y: number) => number;
-var sum2: (x: number, y: number) => number = sum;
-var sum3: binary_op = sum;
-                    </code></pre>
+type PrimaryColor = "red" | "blue" | "green";
+function adjustColor(color: PrimaryColor, value: number) { /* */ }
+adjustColor("red", 123) //ok
+adjustColor("purple", 255) //Error
+                    </pre></code>
+                    
+                </section>
+                <section>
+                    <h2>Enums</h2>
+                    <p>You can create named numeric contants with enums</p>
+                    <pre><code class="typescript">
+enum Directions {
+    Up=1,
+    Down,
+    Left,
+    Right
+}
+
+function Go(d: Directions): string {
+    return "You went " + Directions[d] + " aka " + d;
+}
+
+Go(Directions.Left); //You went left aka 3
+                </pre></code>
                 </section>
                 <section>
                     <h2>Type Aliases</h2>
@@ -183,52 +242,12 @@ var sum3: binary_op = sum;
                     <pre><code class="typescript">
 type Dollars = number;
 type Name = string;
-function BankBalance(person: Name): Dollars { return 3.50 }
-                    </code></pre>
-                </section>
-                <section>
-                    <h2>Any Type</h2>
-                    <p>The any type allows you to put anything inside.</p>
-                    <pre><code class="typescript">
-var a: any = 1;
-var b: any = true;
-var c: any = "test";
-var d: any = null;
-var e: any = undefined;
-var f: any[] = [1,2,3]
-var g: any = ["one","two"]
-                    </code></pre>
-                </section>
-                <section>
-                    <pre><code class="typescript">
-function head(xs: number[]): number {
-    return xs[0];
+function BankBalance(person: Name): Dollars {
+    return 3.50
 }
+                    </code></pre>
+                </section>
 
-function tail(xs: number[]): number[] {
-    return xs.slice(1);
-}
-                    </code></pre>
-                    <p>This code works well with number arrays like head([1,2,3]) but is there any reason it wouldn't work on
-                        an array of strings?. head(["a","b"])
-                    </p>
-                </section>
-                <section>
-                    <h2>Generic (aka Parametric) Types</h2>
-                    <p>These functions take a type as a parameter. A is a variable. Interfaces, classes, and type aliases all support generics</p>
-                    <pre><code class="typescript">
-function head< A >(xs: A[]): A {
-    return xs[0];
-}
-
-function tail< A >(xs: A[]): A[] {
-    return xs.slice(1);
-}
-let one = head< number >([1,2,3]);
-let letter = head< string >(["a","b"]);
-type Container< A > = { value: A };
-                    </code></pre>
-                </section>
                 <section>
                     <h2>Classes</h2>
                     <p>Typescript supports the es6 syntax for classes</p>
@@ -245,7 +264,7 @@ class SoftwareEngineer extends Person {
         super(name)
     }
 }
-var joeTester: Person = new SoftwareEngineer("Joe Tester", "TypeScript");
+var joeTester: Person = new SoftwareEngineer("Joe", "TypeScript");
                     </code></pre>
                 </section>
                 <section>
@@ -268,46 +287,6 @@ class SoftwareEngineer extends Person {
                     </code></pre>
                 </section>
                 <section>
-                    <h2>Abstract Classes</h2>
-                    <p>Abstract classes are base classed which are meant to be inheritted from. They cannot be instantiated directly. They specify methods which must
-                    be implemented in the subclasses. They are allowed to included implementations of methods to share as well. </p>
-                    <pre><code class="typescript">
-abstract class Animal {
-    abstract makeSound(): void;
-    move(): void {
-        console.log("roaming the earth...");
-    }
-}
-class Mammal extends Animal {
-    makeSound(): void {
-        console.log("A noise!");
-    }
-}
-                    </code></pre>
-                    
-                </section>
-                <section>
-                    <h2>Interfaces</h2>
-                    <p>Interfaces can be used to describe objects, classes, and functions. They are similar to abstract classes however, they cannot contain an implementation of a function.</p>
-                    <pre><code class="typescript">
-//object type
-interface Point {
-    x: number;
-    y: number;
-    z?: number;
-    label: string;
-}
-var origin: Point = {x: 0, y: 0, z:0, label: "origin"};
-//function type
-interface binary_op {
-    (x: number, y: number): number
-}
-var add_one: binary_op = function(x: number, y: number): number {
-    return x + y + 1
-};
-                    </code></pre>
-                </section>
-                <section>
                     <h2>Indexable types</h2>
                     <p>Interfaces can also be used to describe container objects like arrays and objects</p>
                     <pre><code class="typescript">
@@ -321,27 +300,11 @@ var yellowpages: PhoneBook = {
     "1112223333": new Person("John"),
     "3334445555": new Person("Jane")
 }
+
 interface GuestList {
     [index: number]: Person
 }
 var partylist: GuestList = [new Person("John"), new Person("Jane")]
-                    </code></pre>
-                </section>
-                <section>
-                    <h2>Classes implementing interfaces</h2>
-                    <p>Interfaces can ensure that a class must implement specific methods and attributes</p>
-                    <pre><code class="typescript">
-interface ClockInterface {
-    currentTime: Date;
-    setTime(d: Date);
-}
-class Clock implements ClockInterface {
-    currentTime: Date;
-    setTime(d: Date) {
-        this.currentTime = d;
-    }
-    constructor(hour: number, minute: number) {}
-}
                     </code></pre>
                 </section>
                 <section>
@@ -370,25 +333,23 @@ person = [20, "Joe Tester"] // Error
                 </section>
                 <section>
                     <h2>Union Types</h2>
-                    <p>Union types are essentially a type which can be either an A or B, where A and B are distinct separate types. </p>
+                    <p>We can use union types to describe pieces of data that can be two or more types of data. The | operator lets us create a union of types.</p>
                     <pre><code class="typescript">
 var password: string | number = "test"
 password = 1234 //also ok!
-function validateArray(
-    values: boolean[] | string[],
-    f: (x: string) => boolean | null | undefined
-): boolean {
-    if(f) {
-        return values.every(x => f(x));
+
+function validatePassword(password: number | string): boolean {
+    if(typeof number == "number") {
+        return number > 1000;
     }else{
-        values.every(x => x);
+        return string.length > 4;
     }
 }
                     </code></pre>
                 </section>
                 <section>
                     <h2>Intersection Types</h2>
-                    <p>Intersection types allow you reprensent an object which has properties from both type A and B, where are A and B are distinct types. The mixin pattern can be described with intersection types.</p>
+                    <p>These allow you describe an object which is one type AND another type. A common JavaScript pattern called a the mixin pattern can be described with intersection types.</p>
                     <pre><code class="typescript">
 type Fahrenheit = {fahrenheit: number};
 type Celcius = {celcius: number};
@@ -400,50 +361,114 @@ function convertToCelcius(temp: Fahrenheit): Fahrenheit & Celcius {
                     </code></pre>
                 </section>
                 <section>
-                    <h2>String Literal Types</h2>
-                    <p>You can treat string constants as types.</p>
-                    <pre><code class="typescript">
-type PrimaryColor = "red" | "blue" | "green";
-function adjustColor(color: PrimaryColor, value: number) { /* */ }
-adjustColor("red", 123) //ok
-adjustColor("purple", 255) //Error
-                    </pre></code>
+                    <h2>Structural Typing</h2>
+                    <p>Most languages traditional languages use a nominal typesystem, which means that the when they compare types they look at the name of the type to determine if an expression is well typed.</p>
                     
+                    Typescript has a structural type system which means that it compares the shape of types rather than just the name.</p>
                 </section>
                 <section>
-                    <h2>Discriminated Unions</h2>
-                    <p></p>
-                    <pre><code>
-interface Square {
-    kind: "square";
-    size: number;
+                    <h2>Structural Typing example</h2>
+                    <pre><code class="typescript">
+type Pet = {name: string, age: number};
+type Person = {name: string, age: number};
+
+function HappyBirthday(p: Person) {
+    p.age++;
+    console.log(`Happy Birthday ${p.name}!`+
+        `You are now ${p.age} years old!`);
 }
-interface Rectangle {
-    kind: "rectangle";
-    width: number;
-    height: number;
-}
-interface Circle {
-    kind: "circle";
-    radius: number;
-}
-type Shape = Square | Rectangle | Circle;
-function area(s: Shape) {
-    switch (s.kind) {
-        case "square": return s.size * s.size;
-        case "rectangle": return s.height * s.width;
-        case "circle": return Math.PI * s.radius ** 2;
+let myDoge = {name: "Spot", age: 4};
+HappyBirthday(myDoge);
+//Happy Birthday Spot! You are now 5 years old!
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>Tsconfig</h2>
+                    <p>Typescript has a config file you can generate for your project called "tsconfig.json".
+                    Among other things, this file allows you to ramp up or ramp down strictness in typing.
+                    Here is an example of a maximally strict config file.
+                    <pre><code class="typescript">
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "sourceMap": true,
+        "target": "ES6",
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noFallthroughCasesInSwitch": true,
+        "strictNullChecks": true
     }
 }
                     </code></pre>
                 </section>
                 <section>
-                    <h2>Structural Typing</h2>
-                    <p>Most languages use what is called a nominal typesystem, which means that the only values which can be used in a variable of a type are the type or subtypes of that type. In a structural type system any type which matches the type structure can accepted instead of that type. </p>
+                    <h2>Control Flow Analysis</h2>
+                    <p>Typescript can also prevent common errors because it understands how data and types flow through JavaScript.</p>
                     <pre><code class="typescript">
+var test: number;
+console.log(test); //error unassigned variable
 
+function goTime(isGoTime: boolean) {
+    if(isGoTime) {
+        return isGoTime;
+    }else{
+        return !isGoTime;
+    }
+    return "asdf"; //error unreachable code
+}
+
+switch(test) {
+    case 1:
+        console.log("Hello world!"); //error switch case fall-through
+    case 2:
+        console.log("Goodnight world!");
+        break;
+    default:
+        console.log("foobar");
+}
                     </code></pre>
                 </section>
+                <section>
+                    <h2>Additional Topics</h2>
+                        <ul>
+                            <li>Any, void, and never types</li>
+                            <li>Type casting</li>
+                            <li>Function type aliases, subtypes, and variance</li>
+                            <li>Parametric (aka Generic) types</li>
+                            <li>Parametric (aka Generic) type constraints</li>
+                            <li>Mapped types</li>
+                            <li>Lookup types</li>
+                            <li>Type Guards</li>
+                            <li>Discriminated unions</li>
+                            <li>Modules</li>
+                            <li>Interfaces</li>
+                            <li>Abstract classes and methods</li>
+                            <li>static class methods</li>
+                            <li>JSX</li>
+                        </ul>
+                </section>
+                <section>
+                    <h2>Setup</h2>
+                    <pre><code class="bash">
+sudo npm install -g typescript
+                    </pre></code>
+                    <p>installs the command tsc</p>
+
+                    <h2>How do you use it?</h2>
+                    <pre><code class="bash">
+tsc tilename.ts
+                    </pre></code>
+                    <p>Upon running tsc on a ts file it will generate a .js file of the same name, which is the translation of the typescript code</p>
+                </section>
+            </div>
+            </div>
+                <h1>Resources</h1>
+                <a href="www.typescriptlang.org">TypeScript homepage</a>
+                <a href="http://www.typescriptlang.org/play/index.html">Online Playground</a>
+                <a href="http://www.typescriptlang.org/docs/tutorial.html">Typescript Documentation</a>
+                <a href="https://github.com/Microsoft/TypeScript/wiki">Typescript Wiki</a>
+                <a href="https://github.com/typings/typings">Community Provided Types for libraries</a>
             </div>
         </div>
 
