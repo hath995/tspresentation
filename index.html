@@ -92,6 +92,13 @@
                     TypeScript, the language, is a strict superset of JavaScript ES6+ that adds a type system to JavaScript. It keeps all of the JavaScript syntax and features. </p>
                     <p>What TypeScript adds is the syntax to describe types of data, objects, classes, and functions.
                     </p>
+                    <aside class="notes">
+                        A common problem today is that es6 syntax and features are not available in old browsers. 
+                        As a developer we want to take advantage of all this helpful new stuff but for cross compatilibity reasons we are constrained. You may have heard of the Babel compiled which translates es6 into older javascript. 
+                        The TypeScript compiler does this as well. It can translate into es6, es5, and es3. 
+
+                        On top of what babel does typescript does something more. 
+                    </aside>
                 </section>
                 <section>
                     <h2>What is a type?</h2>
@@ -101,12 +108,31 @@
                         A data type is a classification of data which tells the compiler or interpreter how the programmer intends to use the data.
                     </b>
                     </p>
+                    <aside class="notes">
+                        It turns out that programming languages can be categorized into two groups, statically typed languages and dynamically typed languages. The big difference between is when is type information known. 
+                        Either at run time, dynamic, or before the program is run. 
+
+                        Dynamically typed: JavaScript, Ruby, Python, Perl, Php
+                        Statically typed: C/C++,C#, objective C, Java, Scala, Go, Haskell, Swift
+                    </aside>
                 </section>
                 <section>
                     <h2>Why should you care about types?</h2>
                     <p>
 Type checking, the process of validating matching types in your programs, removes an entire category of bugs from your program by not allowing you to make them. Essentially, a type system is there to help you ensure correct code without even running your program.
                     </p>
+                    <aside class="notes">
+                        The traditional narrative is that typed languages are strict, rigid, and inexpressive. 
+                        Sure they remove some bugs but they can feel constraining. 
+                        People often say that they prefer prototyping in dynamic programming languages because the type system doesn't get in their way.
+
+                        And it is true that there are valid programs that are not type safe. It turns out there is a trade off in computer science between saftey and expressiveness. There are more valid programs than those that type check.
+                        However, the programs that type check are certain to be free of a huge swath of bugs.
+                        There are many valid type systems, and as they get more expressive the gap between valid programs and typable programs shrinks. 
+
+                        JavaScript is a highly dynamic and expressive language. We don't want to lose that. 
+                        TypeScript also has a powerful, expressive, and flexible type system to match javascript. 
+                    </aside>
                 </section>
                 <section>
                     <h2>JavaScript with Types</h2>
@@ -140,6 +166,9 @@ var i: symbol = Symbol("foo")
                     </td>
                     </tr>
                     </table>
+                    <aside class="notes">
+                        These are the basic data types in JavaScript and their names in TypeScript. Lets go over these one by one. 
+                    </aside>
                 </section>
                 <section>
                     <h2>What happens when we get things wrong</h2>
@@ -154,6 +183,9 @@ example.ts|1 col 5 error| Type 'string' is not assignable to type 'number'.
 example.ts|2 col 5 error| Type 'number' is not assignable to type 'boolean'.
 example.ts|3 col 5 error| Type 'boolean' is not assignable to type 'string'.
                     </pre>
+                    <aside class="notes">
+                    Using a type system is easy. You probably know the phrase square peg in a round hole. Well with a type system the goal is to always put the square peg ino the square hole. That's it. 
+                    </aside>
                 </section>
                 <section>
                     <h2>functions</h2>
@@ -170,6 +202,9 @@ function sum(x: number, y: number): number {
     return x + y;
 }
                     </code></pre>
+                    <aside class="notes">
+                    Tthis is how we describe functions. The parameters of a function get a type. The function also get a return type. 
+                    </aside>
                 </section>
                 <section>
                     <h2>objects</h2>
@@ -189,6 +224,10 @@ var point1: {x: number, y: number, z?: number, name: string} = {
 };
                     </code></pre>
                     <p> The ? after property names indicates the property is optional </p>
+
+                    <aside class="notes">
+                        We create objects all the time in javascript. The important feature here is that for every property we expect our object to have, we also define the type. 
+                    </aside>
                 </section>
                 <section>
                     <h2>Type Aliases</h2>
@@ -206,6 +245,9 @@ var point2: Point = {
     name: "end"
 };
                     </code></pre>
+                    <aside class="notes">
+                        If we plan on making more than one of some type of object we don't want to type all of that type information out for each one, so we can use type aliases to no repeat ourselves. 
+                    </aside>
                 </section>
                 <section>
                     <h2>String Literal Types</h2>
@@ -217,6 +259,9 @@ adjustColor("red", 123) //ok
 adjustColor("purple", 255) //Error
                     </pre></code>
                     
+                    <aside class="notes">
+                        Here we are beginning to lift specific values in javascript up to the type level. 
+                    </aside>
                 </section>
                 <section>
                     <h2>Enums</h2>
@@ -235,6 +280,14 @@ function Go(d: Directions): string {
 
 Go(Directions.Left); //You went left aka 3
                 </pre></code>
+                </section>
+                <section>
+                    <h2>Numeric Literal Types</h2>
+                    <pre><code class-"typescript">
+type EightBit = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
+let coolbit: EightBit = 7; //ok
+let badbit: EightBit = 8; //ok
+                    </code></pre>
                 </section>
                 <section>
                     <h2>Type Aliases</h2>
@@ -461,14 +514,16 @@ tsc tilename.ts
                     </pre></code>
                     <p>Upon running tsc on a ts file it will generate a .js file of the same name, which is the translation of the typescript code</p>
                 </section>
-            </div>
-            </div>
+                <section>
                 <h1>Resources</h1>
                 <a href="www.typescriptlang.org">TypeScript homepage</a>
                 <a href="http://www.typescriptlang.org/play/index.html">Online Playground</a>
                 <a href="http://www.typescriptlang.org/docs/tutorial.html">Typescript Documentation</a>
                 <a href="https://github.com/Microsoft/TypeScript/wiki">Typescript Wiki</a>
                 <a href="https://github.com/typings/typings">Community Provided Types for libraries</a>
+                </section>
+            </div>
+            </div>
             </div>
         </div>
 
