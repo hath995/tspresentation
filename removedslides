@@ -1,0 +1,138 @@
+
+                <section>
+                    <h2>Function Type Alias</h2>
+                    <pre><code class="typescript">
+type binary_op = (x: number, y: number) => number;
+var sum2: (x: number, y: number) => number = sum;
+var sum3: binary_op = sum;
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>Any Type</h2>
+                    <p>The any type allows you to put anything inside.</p>
+                    <pre><code class="typescript">
+var a: any = 1;
+var b: any = true;
+var c: any = "test";
+var d: any = null;
+var e: any = undefined;
+var f: any[] = [1,2,3]
+var g: any = ["one","two"]
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>Interfaces</h2>
+                    <p>Interfaces can be used to describe objects, classes, and functions. They are similar to abstract classes however, they cannot contain an implementation of a function.</p>
+                    <pre><code class="typescript">
+//object type
+interface Point {
+    x: number;
+    y: number;
+    z?: number;
+    label: string;
+}
+var origin: Point = {x: 0, y: 0, z:0, label: "origin"};
+//function type
+interface binary_op {
+    (x: number, y: number): number
+}
+var add_one: binary_op = function(x: number, y: number): number {
+    return x + y + 1
+};
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>Classes implementing interfaces</h2>
+                    <p>Interfaces can ensure that a class must implement specific methods and attributes</p>
+                    <pre><code class="typescript">
+interface ClockInterface {
+    currentTime: Date;
+    setTime(d: Date);
+}
+class Clock implements ClockInterface {
+    currentTime: Date;
+    setTime(d: Date) {
+        this.currentTime = d;
+    }
+    constructor(hour: number, minute: number) {}
+}
+                    </code></pre>
+                </section>
+                <section>
+                    <pre><code class="typescript">
+function head(xs: number[]): number {
+    return xs[0];
+}
+
+function tail(xs: number[]): number[] {
+    return xs.slice(1);
+}
+                    </code></pre>
+                    <p>This code works well with number arrays like head([1,2,3]) but is there any reason it wouldn't work on
+                        an array of strings?. head(["a","b"])
+                    </p>
+                </section>
+                <section>
+                    <h2>Generic (aka Parametric) Types</h2>
+                    <p>These functions take a type as a parameter. A is a variable. Interfaces, classes, and type aliases all support generics</p>
+                    <pre><code class="typescript">
+function head< A >(xs: A[]): A {
+    return xs[0];
+}
+
+function tail< A >(xs: A[]): A[] {
+    return xs.slice(1);
+}
+let one = head< number >([1,2,3]);
+let letter = head< string >(["a","b"]);
+type Container< A > = { value: A };
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>Abstract Classes</h2>
+                    <p>Abstract classes are base classed which are meant to be inheritted from. They cannot be instantiated directly. They specify methods which must
+                    be implemented in the subclasses. They are allowed to included implementations of methods to share as well. </p>
+                    <pre><code class="typescript">
+abstract class Animal {
+    abstract makeSound(): void;
+    move(): void {
+        console.log("roaming the earth...");
+    }
+}
+class Mammal extends Animal {
+    makeSound(): void {
+        console.log("A noise!");
+    }
+}
+                    </code></pre>
+                    
+                </section>
+
+                <section>
+                    <h2>Discriminated Unions</h2>
+                    <p></p>
+                    <pre><code>
+interface Square {
+    kind: "square";
+    size: number;
+}
+interface Rectangle {
+    kind: "rectangle";
+    width: number;
+    height: number;
+}
+interface Circle {
+    kind: "circle";
+    radius: number;
+}
+type Shape = Square | Rectangle | Circle;
+function area(s: Shape) {
+    switch (s.kind) {
+        case "square": return s.size * s.size;
+        case "rectangle": return s.height * s.width;
+        case "circle": return Math.PI * s.radius ** 2;
+    }
+}
+                    </code></pre>
+                </section>
