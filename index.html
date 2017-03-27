@@ -188,6 +188,20 @@ example.ts|3 col 5 error| Type 'boolean' is not assignable to type 'string'.
                     </aside>
                 </section>
                 <section>
+                    <h2>Any Type</h2>
+                    <p>The TypeScript type system supports gradual typing, in other words it will let you add types as need. The any type allows you to put anything inside. It is an escape hatch from the type system.
+                    TypeScript also has syntax for type casting if needed. Ideally, they should be used sparingly. </p>
+                    <pre><code class="typescript">
+var a: any = 1;
+var b: any = true;
+var c: any = "test";
+var d: any = null;
+var e: any = undefined;
+var f: any[] = [1,2,3]
+var g: any = ["one","two"]
+                    </code></pre>
+                </section>
+                <section>
                     <h2>functions</h2>
                     <pre><code class="javascript">
 function sum(x, y) {
@@ -257,7 +271,7 @@ type PrimaryColor = "red" | "blue" | "green";
 function adjustColor(color: PrimaryColor, value: number) { /* */ }
 adjustColor("red", 123) //ok
 adjustColor("purple", 255) //Error
-                    </pre></code>
+                    </code></pre>
                     
                     <aside class="notes">
                         Here we are beginning to lift specific values in javascript up to the type level. 
@@ -279,11 +293,11 @@ function Go(d: Directions): string {
 }
 
 Go(Directions.Left); //You went left aka 3
-                </pre></code>
+                </code></pre>
                 </section>
                 <section>
                     <h2>Numeric Literal Types</h2>
-                    <pre><code class-"typescript">
+                    <pre><code class="typescript">
 type EightBit = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
 let coolbit: EightBit = 7; //ok
 let badbit: EightBit = 8; //ok
@@ -300,7 +314,19 @@ function BankBalance(person: Name): Dollars {
 }
                     </code></pre>
                 </section>
+                <section>
+                    <h2>Function Type Alias</h2>
+                    <p>Functions can also be described with type aliases</p>
+                    <pre><code class="typescript">
+function sum(x: number, y: number): number {
+    return x + y;
+}
 
+type binary_op = (x: number, y: number) => number;
+var sum2: (x: number, y: number) => number = sum;
+var sum3: binary_op = sum;
+                    </code></pre>
+                </section>
                 <section>
                     <h2>Classes</h2>
                     <p>Typescript supports the es6 syntax for classes</p>
@@ -327,15 +353,71 @@ var joeTester: Person = new SoftwareEngineer("Joe", "TypeScript");
                     </p>
                     <pre><code class="typescript">
 class Person {
-    name: string;
     constructor(public name: string) {}
 }
 class SoftwareEngineer extends Person {
-    prog_language: string;
+    private prog_language: string;
     constructor(public name: string, private prog_language: string) {
         super(name)
         this.prog_language = prog_language;
     }
+}
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>Abstract Classes</h2>
+                    <p>Abstract classes are base classed which are meant to be inheritted from. They cannot be instantiated directly. They specify methods which must
+                    be implemented in the subclasses. They are allowed to included implementations of methods to share as well. </p>
+                    <pre><code class="typescript">
+abstract class Animal {
+    abstract makeSound(): void;
+    move(): void {
+        console.log("roaming the earth...");
+    }
+}
+class Mammal extends Animal {
+    makeSound(): void {
+        console.log("A noise!");
+    }
+}
+                    </code></pre>
+                    
+                </section>
+                <section>
+                    <h2>Interfaces</h2>
+                    <p>Interfaces can be used to describe objects, classes, and functions. They are similar to abstract classes however, they cannot contain an implementation of a function. Interfaces fill a similar role to type aliases, but they can do and describe a few more things.</p>
+                    <pre><code class="typescript">
+//object type
+interface Point {
+    x: number;
+    y: number;
+    z?: number;
+    label: string;
+}
+var origin: Point = {x: 0, y: 0, z:0, label: "origin"};
+//function type
+interface binary_op {
+    (x: number, y: number): number
+}
+var add_one: binary_op = function(x: number, y: number): number {
+    return x + y + 1
+};
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>Classes implementing interfaces</h2>
+                    <p>Interfaces can ensure that a class must implement specific methods and attributes.</p>
+                    <pre><code class="typescript">
+interface ClockInterface {
+    currentTime: Date;
+    setTime(d: Date);
+}
+class Clock implements ClockInterface {
+    currentTime: Date;
+    setTime(d: Date) {
+        this.currentTime = d;
+    }
+    constructor(hour: number, minute: number) {}
 }
                     </code></pre>
                 </section>
@@ -362,7 +444,7 @@ var partylist: GuestList = [new Person("John"), new Person("Jane")]
                 </section>
                 <section>
                     <h2>Immutable data</h2>
-                    <p>Variables, classes, and interfaces can enforce immutability on variables and properties. TypeScript also comes with a ReadonlyArray<T> type. Only the compiler forbids reassignment. </p>
+                    <p>Variables, classes, and interfaces can enforce immutability on variables and properties. TypeScript also comes with a ReadonlyArray< T > type. Only the compiler forbids reassignment. </p>
                     <pre><code class="typescript">
 const example = true;
 interface ImmutablePoint {
@@ -392,24 +474,56 @@ var password: string | number = "test"
 password = 1234 //also ok!
 
 function validatePassword(password: number | string): boolean {
-    if(typeof number == "number") {
-        return number > 1000;
+    if(typeof password == "number") {
+        return password > 1000;
     }else{
-        return string.length > 4;
+        return password.length > 4;
     }
 }
                     </code></pre>
                 </section>
+                
+                <section>
+                    <h2>Type Guards</h2>
+                    <p>Once you have the ability to mash types together with Union Types, TypeScript also gives use the abiility to pull types apart with type guards.</p>
+                    <pre><code class="typescript">
+class BinaryPassword {
+  data: ArrayBuffer;
+  constructor(public data: ArrayBuffer) {}
+}
+type EncryptedPassword = {password: string};
+function IsEncryptedPassword(obj: Any): obj is Password {
+    return obj.password !== undefined
+}
+
+type Password = BinaryPassword | EncryptedPassword | number | string;
+function validatePassword(password: Password): boolean {
+    if(password instanceof BinaryPassword) {
+        return true;
+    }else if(IsEncryptedPassword(password)) {
+        return true;
+    }else if(typeof password == "number") {
+        return number > 1000;
+    }else if(typeof password == "string" ){
+        return string.length > 4;
+    }else{
+        throw new TypeError("Not a valid password type");
+    }
+}
+                    </code></pre>
+                </section>
+
                 <section>
                     <h2>Intersection Types</h2>
                     <p>These allow you describe an object which is one type AND another type. A common JavaScript pattern called a the mixin pattern can be described with intersection types.</p>
                     <pre><code class="typescript">
 type Fahrenheit = {fahrenheit: number};
-type Celcius = {celcius: number};
+type Celcius = {celcius?: number};
 function convertToCelcius(temp: Fahrenheit): Fahrenheit & Celcius {
+    let result: Fahrenheit & Celcius = temp;
     let c_temp = (temp.fahrenheit-32)*(5/9);
-    temp.celcius = c_temp;
-    return temp;
+    result.celcius = c_temp;
+    return result;
 }
                     </code></pre>
                 </section>
@@ -417,20 +531,20 @@ function convertToCelcius(temp: Fahrenheit): Fahrenheit & Celcius {
                     <h2>Structural Typing</h2>
                     <p>Most languages traditional languages use a nominal typesystem, which means that the when they compare types they look at the name of the type to determine if an expression is well typed.</p>
                     
-                    Typescript has a structural type system which means that it compares the shape of types rather than just the name.</p>
+                    <p>Typescript has a structural type system which means that it compares the shape of types rather than just the name.</p>
                 </section>
                 <section>
                     <h2>Structural Typing example</h2>
                     <pre><code class="typescript">
-type Pet = {name: string, age: number};
 type Person = {name: string, age: number};
+type Pet    = {name: string, age: number, breed: string};
 
 function HappyBirthday(p: Person) {
     p.age++;
     console.log(`Happy Birthday ${p.name}!`+
         `You are now ${p.age} years old!`);
 }
-let myDoge = {name: "Spot", age: 4};
+let myDoge: Pet = {name: "Spot", age: 4, breed: "pug"};
 HappyBirthday(myDoge);
 //Happy Birthday Spot! You are now 5 years old!
                     </code></pre>
@@ -483,46 +597,123 @@ switch(test) {
                     </code></pre>
                 </section>
                 <section>
+                    <h2>Discriminated Unions</h2>
+                    <p>TypeScript has the ability to create complex types called a discriminated unions. Combining literal types or type guard functions TypeScript can narrow  a union type into a specific type for per type behavior.</p>
+                    <pre><code>
+interface Square {
+    kind: "square";
+    size: number;
+}
+interface Rectangle {
+    kind: "rectangle";
+    width: number;
+    height: number;
+}
+interface Circle {
+    kind: "circle";
+    radius: number;
+}
+type Shape = Square | Rectangle | Circle;
+function area(s: Shape) {
+    switch (s.kind) {
+        case "square": return s.size * s.size;
+        case "rectangle": return s.height * s.width;
+        case "circle": return Math.PI * s.radius ** 2;
+    }
+}
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>Generic (aka Parametric) Types</h2>
+                    <p>These functions take a type as a parameter. A is a variable. Interfaces, classes, and type aliases all support generics</p>
+                    <pre><code class="typescript">
+function head< A >(xs: A[]): A { return xs[0]; }
+
+function tail< A >(xs: A[]): A[] { return xs.slice(1); }
+let one = head< number >([1,2,3]);
+let letter = head< string >(["a","b"]);
+type Container< A > = { value: A };
+
+class LinkedList< A > {
+  data: A;
+  next: LinkedList< A >;
+  constructor(public value: A, public next: LinkedList< A >) { }
+}
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>Generic Type Constraints</h2>
+                    <p>It is possible to add constraints to generic types.</p>
+                    <pre><code class="typescript">
+interface Lengthwise {
+  length: number;
+}
+function logLength< T extends Lengthwise >(arg: T): T {
+    console.log(arg.length);
+    return arg;
+}
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h2>Lookup Types</h2>
+                    <p>A common pattern in JavaScript is to use indirection when working with objects of a certain kind .</p>
+                    <pre><code class="typescript">
+inteface Person {
+    name: string;
+    age: number;
+}
+let person = {name: "Joe Tester", age: 30};
+let personProp: keyof Person = "name"; //ok
+let personProp2: keyof Person = "test"; //error
+function getProperty<T, K extends keyof T>(p: T, prop: keyof K): T[K] {
+    return p[prop];
+}
+let age: number = getProperty(person, "age");
+                    </code></pre>
+                </section>
+                <section>
                     <h2>Additional Topics</h2>
                         <ul>
-                            <li>Any, void, and never types</li>
-                            <li>Type casting</li>
+                            <li>void, and never types</li>
                             <li>Function type aliases, subtypes, and variance</li>
-                            <li>Parametric (aka Generic) types</li>
-                            <li>Parametric (aka Generic) type constraints</li>
                             <li>Mapped types</li>
-                            <li>Lookup types</li>
-                            <li>Type Guards</li>
-                            <li>Discriminated unions</li>
                             <li>Modules</li>
-                            <li>Interfaces</li>
-                            <li>Abstract classes and methods</li>
                             <li>static class methods</li>
                             <li>JSX</li>
                         </ul>
                 </section>
                 <section>
+                    <h2>The Goal of a Type System</h2>
+                    <p>The goal of a type system is to ensure that our program is free of bugs. However, to actually get this benefit takes a bit of design. 
+                       The trick is to push business logic into the types. The goal is to make invalid states inexpressible. If you have an expressive type system 
+                       it becomes easier to describe you business logic as types and thereby create code that is provably correct.
+                    </p>
+                </section>
+                <section>
                     <h2>Setup</h2>
                     <pre><code class="bash">
 sudo npm install -g typescript
-                    </pre></code>
+                    </code></pre>
                     <p>installs the command tsc</p>
 
                     <h2>How do you use it?</h2>
                     <pre><code class="bash">
 tsc tilename.ts
-                    </pre></code>
+                    </code></pre>
                     <p>Upon running tsc on a ts file it will generate a .js file of the same name, which is the translation of the typescript code</p>
                 </section>
                 <section>
                 <h1>Resources</h1>
-                <a href="www.typescriptlang.org">TypeScript homepage</a>
-                <a href="http://www.typescriptlang.org/play/index.html">Online Playground</a>
-                <a href="http://www.typescriptlang.org/docs/tutorial.html">Typescript Documentation</a>
-                <a href="https://github.com/Microsoft/TypeScript/wiki">Typescript Wiki</a>
-                <a href="https://github.com/typings/typings">Community Provided Types for libraries</a>
+                <ul>
+                    <li><a href="www.typescriptlang.org">TypeScript homepage</a></li>
+                    <li><a href="http://www.typescriptlang.org/play/index.html">Online Playground</a></li>
+                    <li><a href="http://www.typescriptlang.org/docs/tutorial.html">Typescript Documentation</a></li>
+                    <li><a href="https://github.com/Microsoft/TypeScript/wiki">Typescript Wiki</a></li>
+                    <li><a href="https://github.com/typings/typings">Community Provided Types for libraries</a></li>
+                </ul>
                 </section>
-            </div>
             </div>
             </div>
         </div>
