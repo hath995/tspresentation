@@ -189,7 +189,7 @@ example.ts|3 col 5 error| Type 'boolean' is not assignable to type 'string'.
                 </section>
                 <section>
                     <h2>Any Type</h2>
-                    <p>The TypeScript type system supports gradual typing, in other words it will let you add types as need. The any type allows you to put anything inside. It is an escape hatch from the type system.
+                    <p>The TypeScript type system supports gradual typing, in other words, it will let you add types as need. The "any" type allows you to put anything inside. It is an escape hatch from the type system.
                     TypeScript also has syntax for type casting if needed. Ideally, they should be used sparingly. </p>
                     <pre><code class="typescript">
 var a: any = 1;
@@ -366,8 +366,8 @@ class SoftwareEngineer extends Person {
                 </section>
                 <section>
                     <h2>Abstract Classes</h2>
-                    <p>Abstract classes are base classed which are meant to be inheritted from. They cannot be instantiated directly. They specify methods which must
-                    be implemented in the subclasses. They are allowed to included implementations of methods to share as well. </p>
+                    <p>Abstract classes are base classed which are meant to be inherited from. They cannot be instantiated directly. They specify methods which must
+                    be implemented in the subclasses. They are allowed to include implementations of methods to share as well. </p>
                     <pre><code class="typescript">
 abstract class Animal {
     abstract makeSound(): void;
@@ -459,7 +459,7 @@ let hex_letters: ReadonlyArray< string > = ['A','B','C','D','E','F'];
                 </section>
                 <section>
                     <h2>Tuple Types</h2>
-                    <p>Tuples are a way to describe  fixed length arrays with types for each index.</p>
+                    <p>Tuples are a way to describe fixed length arrays with types for each index.</p>
                     <pre><code class="typescript">
 let person: [string, number] = ["John Smith", 30];
 person = ["Jane Doe", 30]; //ok
@@ -485,7 +485,7 @@ function validatePassword(password: number | string): boolean {
                 
                 <section>
                     <h2>Type Guards</h2>
-                    <p>Once you have the ability to mash types together with Union Types, TypeScript also gives use the abiility to pull types apart with type guards.</p>
+                    <p>Once you have the ability to mash types together with Union Types, TypeScript also gives us the ability to pull types apart with type guards.</p>
                     <pre><code class="typescript">
 class BinaryPassword {
   data: ArrayBuffer;
@@ -515,7 +515,7 @@ function validatePassword(password: Password): boolean {
 
                 <section>
                     <h2>Intersection Types</h2>
-                    <p>These allow you describe an object which is one type AND another type. A common JavaScript pattern called a the mixin pattern can be described with intersection types.</p>
+                    <p>These allow you describe an object which is one type AND another type. A common JavaScript pattern called the "mixin" pattern can be described with intersection types.</p>
                     <pre><code class="typescript">
 type Fahrenheit = {fahrenheit: number};
 type Celcius = {celcius?: number};
@@ -529,7 +529,7 @@ function convertToCelcius(temp: Fahrenheit): Fahrenheit & Celcius {
                 </section>
                 <section>
                     <h2>Structural Typing</h2>
-                    <p>Most languages traditional languages use a nominal typesystem, which means that the when they compare types they look at the name of the type to determine if an expression is well typed.</p>
+                    <p>Most languages traditional languages use a nominal type system, which means that when they compare types, they look at the name of the type to determine if an expression is well typed.</p>
                     
                     <p>Typescript has a structural type system which means that it compares the shape of types rather than just the name.</p>
                 </section>
@@ -598,7 +598,7 @@ switch(test) {
                 </section>
                 <section>
                     <h2>Discriminated Unions</h2>
-                    <p>TypeScript has the ability to create complex types called a discriminated unions. Combining literal types or type guard functions TypeScript can narrow  a union type into a specific type for per type behavior.</p>
+                    <p>TypeScript has the ability to create complex types called a discriminated unions. Combining literal types or type guard functions TypeScript can narrow a union type into a specific type to define per type behavior.</p>
                     <pre><code>
 interface Square {
     kind: "square";
@@ -687,8 +687,8 @@ let age: number = getProperty(person, "age");
                 <section>
                     <h2>The Goal of a Type System</h2>
                     <p>The goal of a type system is to ensure that our program is free of bugs. However, to actually get this benefit takes a bit of design. 
-                       The trick is to push business logic into the types. The goal is to make invalid states inexpressible. If you have an expressive type system 
-                       it becomes easier to describe you business logic as types and thereby create code that is provably correct.
+                       The trick is to push business logic into the types. The goal is to make invalid states inexpressible. If you have an expressive type system, 
+                       it becomes easier to describe your business logic as types and thereby create code that is provably correct.
                     </p>
                 </section>
                 <section>
